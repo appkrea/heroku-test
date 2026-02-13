@@ -7,7 +7,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 if (!isProd) {
   // DEV: redirect all non-API routes to Vite
-  app.get('*', (req, res, next) => {
+  app.get(/.*/, (req, res, next) => {
     if (req.path.startsWith('/api')) return next()
     return res.redirect(`http://localhost:5173${req.originalUrl}`)
   })
@@ -15,7 +15,7 @@ if (!isProd) {
   // PROD: serve frontend dist from ../frontend/dist
   const distPath = path.join(__dirname, '../frontend/dist')
   app.use('/', express.static(distPath))
-  app.get('*', (req, res, next) => {
+  app.get(/.*/, (req, res, next) => {
     if (req.path.startsWith('/api')) return next()
     return res.sendFile(path.join(distPath, 'index.html'))
   })
